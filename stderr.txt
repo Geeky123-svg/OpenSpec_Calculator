@@ -14,3 +14,4 @@ Press CTRL+C to quit
 127.0.0.1 - - [25/May/2026 12:24:07] "POST /calculate HTTP/1.1" 200 -
 127.0.0.1 - - [25/May/2026 12:24:25] "POST /calculate HTTP/1.1" 200 -
 127.0.0.1 - - [25/May/2026 12:33:14] "POST /calculate HTTP/1.1" 200 -
+ * Detected change in 'C:\\Users\\D E L L\\Desktop\\openspec\\OpenSpec_Calculator\\app.py', reloading
