@@ -6,6 +6,14 @@ def test_index_route():
     client = app.test_client()
     response = client.get("/")
     assert response.status_code == 200
+    assert "text/html" in response.content_type
+    assert "OpenSpec Calculator" in response.get_data(as_text=True)
+
+
+def test_api_status_route():
+    client = app.test_client()
+    response = client.get("/api")
+    assert response.status_code == 200
     data = response.get_json()
     assert data["message"] == "Calculator API is running."
     assert "usage" in data

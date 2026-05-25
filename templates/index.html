@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenSpec Calculator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="page-shell">
+    <section class="calculator-card">
+      <div class="branding">
+        <h1>OpenSpec Calculator</h1>
+        <p>Beautiful browser calculator with a clean UI and instant results.</p>
+      </div>
+
+      <div class="screen" id="result">Ready to calculate</div>
+
+      <form id="calculator-form" class="calculator-form" onsubmit="return false;">
+        <label class="field-group">
+          <span>a</span>
+          <input id="value-a" type="text" placeholder="Enter first number" autocomplete="off">
+        </label>
+
+        <label class="field-group">
+          <span>b</span>
+          <input id="value-b" type="text" placeholder="Enter second number" autocomplete="off">
+        </label>
+
+        <div class="button-grid">
+          <button type="button" data-op="add">Add</button>
+          <button type="button" data-op="subtract">Subtract</button>
+          <button type="button" data-op="multiply">Multiply</button>
+          <button type="button" data-op="divide">Divide</button>
+        </div>
+      </form>
+
+      <div class="feedback" id="feedback">Choose an operation to see the result instantly.</div>
+    </section>
+  </main>
+
+  <script>
+    const buttons = document.querySelectorAll('[data-op]');
+    const feedback = document.getElementById('feedback');
+    const resultEl = document.getElementById('result');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', async () => {
+        const operation = button.dataset.op;
+        const a = document.getElementById('value-a').value;
+        const b = document.getElementById('value-b').value;
+
+        feedback.textContent = 'Calculating...';
+        resultEl.textContent = 'Working...';
+
+        try {
+          const response = await fetch('/calculate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ operation, a, b }),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            resultEl.textContent = 'Error';
+            feedback.textContent = data.error || 'Something went wrong.';
+            return;
+          }
+
+          resultEl.textContent = data.result;
+          feedback.textContent = `Result for ${operation}(${a}, ${b})`;
+        } catch (error) {
+          resultEl.textContent = 'Error';
+          feedback.textContent = 'Unable to connect to the calculator service.';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

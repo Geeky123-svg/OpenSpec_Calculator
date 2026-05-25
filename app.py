@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from calculator import calculate, build_error_response
 
 app = Flask(__name__)
@@ -6,6 +6,11 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def index():
+    return render_template("index.html")
+
+
+@app.route("/api", methods=["GET"])
+def api_status():
     return jsonify({
         "message": "Calculator API is running.",
         "usage": "POST /calculate with JSON {\"operation\": \"add\", \"a\": 1, \"b\": 2}"
